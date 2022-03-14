@@ -15,11 +15,13 @@ def game():
 
     # 開始猜測
     while times:
-        print("Input word:")
+        print("Input word(rest times:", times,") : ")
         guessString = input() # 輸入猜測單字
 
         if len(ans) == len(guessString): # 長度正確
-            if guessString == ans: # 正確答案
+            if guessString not in words[length]: # 單字不再 list 裡
+                print("word not in the list!\n")
+            elif guessString == ans: # 正確答案
                 print(color[2] + guessString)
                 print("\nAll right!")
                 return
@@ -40,13 +42,13 @@ def game():
                         result.append(1)
                     else: # 字母未出現
                         result.append(0)
-
+                #輸出猜測結果
                 for i in range(len(guessString)):
                     print(color[result[i]] + guessString[i], end='')
                 print(color[0])
-            times -= 1
+                times -= 1
         else:
-            print("wrang word length!!!!")
+            print("\nwrang word length!")
 
     print("\nFaill!!")
     return
