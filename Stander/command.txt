@@ -1,0 +1,12 @@
+
+- play: game start
+- setting
+    - length: adject word length
+    - times: adject failed times
+    - exit: exit game setting
+- help: see command
+- exit: end App
+
+hint: 2: it's right position
+      1: word has the alpha
+      0: the alpha isn't appeared
