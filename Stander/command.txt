@@ -1,11 +1,11 @@
 
 - play: game start
 - setting
-    - length: adject word length
-    - times: adject failed times
+    - length: adjust word length
+    - times: adjust failed times
     - exit: exit game setting
 - help: see command
-- exit: end App
+- exit: end APP
 
 hint: 2: it's right position
       1: word has the alpha

@@ -1,4 +1,4 @@
-import random
+from random import randint
 
 words = [] # 單字庫
 length = 5 # 單字長度
@@ -10,7 +10,7 @@ def game():
     global length
     global words
     # 設定答案
-    ans = words[length][random.randint(1, len(words[length])-1)]
+    ans = words[length][randint(1, len(words[length])-1)]
     print("The ans is: " + ans)
 
     # 開始猜測
@@ -22,7 +22,7 @@ def game():
             if guessString not in words[length]: # 單字不再 list 裡
                 print("word not in the list!\n")
             elif guessString == ans: # 正確答案
-                print(color[2] + guessString)
+                print(color[2] + guessString + color[0])
                 print("\nAll right!")
                 return
             else: # 錯誤單字
@@ -37,7 +37,8 @@ def game():
                     if guessString[i] == ans[i]: # 位置正確
                         appearedChar[ord(guessString[i])] -= 1
                         result.append(2)
-                    elif appearedChar[ord(guessString[i])]: # 字母有出現
+                for i in range(len(guessString)):
+                    if appearedChar[ord(guessString[i])]: # 字母有出現
                         appearedChar[ord(guessString[i])] -= 1
                         result.append(1)
                     else: # 字母未出現
@@ -58,15 +59,15 @@ def gameSetting():
     global length
     global words
 
-    print("\n- length: adject word length\n- times: adject failed times\n- exit: exit game setting")
+    print("\n- length: adjust word length\n- times: adjust failed times\n- exit: exit game setting")
     while True:
         print("Input setting command: ")
         commandString = input() # 輸入指令字串
 
         if commandString == "length": # 調整題目長度
-            length = input("- word length is ", length, ": ")
+            length = int(input(f'- word length is {length}: '))
         elif commandString == "times": # 調整失敗容許次數
-            times = input("- failed times is ", times, ": ")
+            times = int(input(f'- failed times is {times}: '))
         elif commandString == "exit": # 退出設定
             print("\nsetting complete")
             print("word length: ", length)
