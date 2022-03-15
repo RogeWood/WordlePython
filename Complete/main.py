@@ -11,13 +11,6 @@ def init():
     global fpsclock
     fpsclock = pygame.time.Clock() # 畫面更新律變數
 
-    global running
-    running = True
-    global gameOver
-    gameOver = True
-    global setting
-    setting = False
-
     # 菜單設定
     global menuObject
     menuObject = object.Menu()
@@ -27,9 +20,6 @@ def init():
     settingMenuObject = object.SettingMenu()
 
 def menu(event):
-    global running
-    global gameOver
-    global setting
 
     for btn in menuObject.buttons:
         # 事件處理
@@ -37,42 +27,49 @@ def menu(event):
             if menuObject.buttons[btn].click(event):
                 print(btn)
                 if btn == "exit": # 結束遊戲
-                    running = False
+                    object.GameSetting.running = False
                 elif btn == "start":
-                    gameOver = False
+                    object.GameSetting.gameOver = False
                 elif btn == "setting":
-                    setting = True
+                    object.GameSetting.setting = True
         # 物件更新
-        for btn in menuObject.buttons:# 按鈕更新
-            screen.blit(menuObject.buttons[btn].surface, menuObject.buttons[btn].poistion)
-        screen.blit(menuObject.titleText.textSurface, menuObject.titleText.poistion)
+        menuObject.update(screen)
 
 def settingMenu(event):
-    global setting
     # 事件處理
     if event.type == pygame.MOUSEBUTTONDOWN:
         if settingMenuObject.backButton.click(event):
-            setting = False
+            object.GameSetting.setting = False
+        elif settingMenuObject.lengthBar.upButton.click(event):
+            if object.GameSetting.wordLength < 9:
+                object.GameSetting.wordLength += 1
+        elif settingMenuObject.lengthBar.downButton.click(event):
+            if object.GameSetting.wordLength > 1:
+                object.GameSetting.wordLength -= 1
+        elif settingMenuObject.timesBar.upButton.click(event):
+            if object.GameSetting.faildTimes < 9:
+                object.GameSetting.faildTimes += 1
+        elif settingMenuObject.timesBar.downButton.click(event):
+            if object.GameSetting.faildTimes > 1:
+                object.GameSetting.faildTimes -= 1
     # 物件更新
     # screen.blit(titleText.textSurface, settingMenuObject.titleText)
-    screen.blit(settingMenuObject.backButton.surface, settingMenuObject.backButton.poistion)
-
+    settingMenuObject.update(screen)
 def game(event):
     pass
 
 def main():
     # 初始設定
     init()
-    global running
 
-    while running: # 程式運行中
+    while object.GameSetting.running: # 程式運行中
         for event in pygame.event.get(): # 讀取事件
             if event.type == pygame.QUIT: # 退出遊戲
-                running = False
+                object.GameSetting.running = False
             else:
                 screen.fill((0,0,0)) # 背景色
-                if gameOver: # 遊戲結束
-                    if setting: # 設定菜單
+                if object.GameSetting.gameOver: # 遊戲結束
+                    if object.GameSetting.setting: # 設定菜單
                         settingMenu(event)
                     else: # 主菜單
                         menu(event)
