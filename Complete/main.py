@@ -1,7 +1,6 @@
 import pygame
 from pygame.locals import *
 import object
-import calculate
 
 def init():
     # 初始設定
@@ -68,15 +67,20 @@ def game(event):
                 elif btn == "restart":
                     gameObject = object.Game()
                 elif btn == "answer":
-                    print("event: Show answer")
+                    if gameObject.showAnswer:
+                        gameObject.showAnswer = False
+                    else:
+                        gameObject.showAnswer = True
                     # object.GameSetting.setting = True
     elif event.type == KEYDOWN:
-        if event.key >= ord('a') and event.key <= ord('z'):
-            gameObject.addAlpha(chr(event.key))
-        elif event.key == K_BACKSPACE:
-            gameObject.deleteAplha()
-        elif event.key == K_RETURN:
-            gameObject.checkWord()
+        gameObject.hintEnable = False
+        if not gameObject.isComplete:
+            if event.key >= ord('a') and event.key <= ord('z'):
+                gameObject.addAlpha(chr(event.key))
+            elif event.key == K_BACKSPACE:
+                gameObject.deleteAplha()
+            elif event.key == K_RETURN:
+                gameObject.checkWord()
     # 物件更新
     gameObject.update(screen)
 
