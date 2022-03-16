@@ -18,7 +18,7 @@ class GameSetting():
 
     # 遊戲設定
     wordLength = 5
-    faildTimes = 5
+    faildTimes = 6
 
     # 遊戲狀態
     running = True
@@ -41,6 +41,7 @@ class Button():
         self.rect = pygame.Rect(self.poistion.x, self.poistion.y, size[0], size[1])
 
     def click(self, event): # 按下按鈕
+        print(self.text.textSurface)
         x, y = Vector2(pygame.mouse.get_pos()) - self.mouseDivide
         if pygame.mouse.get_pressed()[0] and self.rect.collidepoint(x, y):
             print(self.text, "BUTTON DOWN")
@@ -54,7 +55,7 @@ class Text():
         self.color = color
         self.poistion = Vector2(calculate.middlePosition([parnetSize[0] + pos[0], parnetSize[1] + pos[1]], self.textSurface.get_size()))
 
-    def textChange(self, text):
+    def textChange(self, text): # 更改文字
         self.textSurface = self.font.render(text, True, self.color)
 
 class ValueSetBar():
@@ -72,7 +73,7 @@ class ValueSetBar():
         self.downButton = Button("-", [40, 0], pygame.Color("Yellow"), self.surfaceSize,[30,30], self.poistion)
 
     def update(self, text):
-        self.valueText.textChange(str(text))
+        self.valueText.textChange(str(text)) # 數字顯示調整
         # bar 圖案建制
         self.surface.fill(self.background)
         self.surface.blit(self.name.textSurface, self.name.poistion)
@@ -102,6 +103,7 @@ class SettingMenu():
         screen.blit(self.backButton.surface, self.backButton.poistion)
         screen.blit(self.lengthBar.surface, self.lengthBar.poistion)
         screen.blit(self.timesBar.surface, self.timesBar.poistion)
+
 class Menu():
     def __init__(self):
         # 標題
@@ -118,3 +120,84 @@ class Menu():
         for btn in self.buttons:# 按鈕更新
             screen.blit(self.buttons[btn].surface, self.buttons[btn].poistion)
         screen.blit(self.titleText.textSurface, self.titleText.poistion)
+
+class WordBox():
+    def __init__(self, pos, size, fontSize, parnetSize, parnetPos):
+        # 文字匡面板
+        self.size = [size, size]
+        self.surface = pygame.Surface(self.size)
+        self.poistion = pos
+        self.surface.fill(pygame.Color("Black"))
+
+        # 字母設定
+        self.alpha = ""
+        self.text = Text(self.alpha, pos, fontSize, self.size, pygame.Color("White"))
+        self.surface.blit(self.text.textSurface, calculate.middlePosition(self.size, self.text.textSurface.get_size()))
+
+    def update(self, parnetSurface):
+        self.surface.fill(pygame.Color("Black"))
+        self.surface.blit(self.text.textSurface, calculate.middlePosition(self.size, self.text.textSurface.get_size()))
+        parnetSurface.blit(self.surface, self.poistion)
+
+    def changeText(self, alpha): # 更改字母
+        self.alpha = alpha
+        self.text.textChange(alpha)
+
+class WordTable():
+    def __init__(self, pos = [0, 0], boxSize = 60, gap = 10):
+        # 單字table
+        self.size = [GameSetting.wordLength*(boxSize+gap)+gap, GameSetting.faildTimes*(boxSize+gap)+gap]
+        self.surface = pygame.Surface(self.size)
+        self.poistion = Vector2(calculate.middlePosition([GameSetting.screenSize[0] - pos[0], GameSetting.screenSize[1] - pos[1]], self.size))
+        self.surface.fill((50,50,50))
+
+        #文字方塊
+        self.words = []
+        for i in range(GameSetting.faildTimes):
+            a = []
+            for j in range(GameSetting.wordLength):
+                a.append(WordBox([gap + (boxSize + gap) * j, gap + (boxSize + gap) * i], boxSize, 24, self.size, self.poistion))
+            self.words.append(a)
+
+    def update(self, screen):
+        # 文字方塊更新
+        for row in self.words:
+            for w in row:
+                w.update(self.surface)
+        screen.blit(self.surface, self.poistion)
+
+class Game():
+    def __init__(self):
+        # 選項按鈕
+        self.buttons = {"back": Button("Back to menu", [-800, -170], GameSetting.buttonColor, GameSetting.screenSize),
+                        "restart": Button("Restart", [-800, 30], GameSetting.buttonColor, GameSetting.screenSize),
+                        "answer": Button("Show answer", [-800, 230], GameSetting.buttonColor, GameSetting.screenSize)
+                       }
+
+        # 單字table
+        self.wordTable = WordTable()
+
+        self.point = [0, 0]
+    def update(self, screen): # 畫面更新
+        for btn in self.buttons:# 按鈕更新
+            screen.blit(self.buttons[btn].surface, self.buttons[btn].poistion)
+        self.wordTable.update(screen) # 單字table更新
+
+    def addAlpha(self, text):
+        self.wordTable.words[self.point[0]][self.point[1]].changeText(text)
+        if self.point[1] < GameSetting.wordLength-1:
+            self.point[1] += 1
+
+    def deleteAplha(self):
+        self.wordTable.words[self.point[0]][self.point[1]].changeText("")
+        if self.point[1] > 0:
+            self.point[1] -= 1
+
+    def checkWord(self):
+        if self.wordTable.words[self.point[0]][GameSetting.wordLength-1].alpha != "": # 最後一個單字
+            if self.point[0] < GameSetting.faildTimes-1:
+                # 檢查單字
+                self.point[0] += 1
+                self.point[1] = 0
+            else:
+                print("gamove fail")

@@ -25,10 +25,11 @@ def menu(event):
         # 事件處理
         if event.type == pygame.MOUSEBUTTONDOWN:
             if menuObject.buttons[btn].click(event):
-                print(btn)
                 if btn == "exit": # 結束遊戲
                     object.GameSetting.running = False
                 elif btn == "start":
+                    global gameObject
+                    gameObject = object.Game()
                     object.GameSetting.gameOver = False
                 elif btn == "setting":
                     object.GameSetting.setting = True
@@ -55,8 +56,29 @@ def settingMenu(event):
     # 物件更新
     # screen.blit(titleText.textSurface, settingMenuObject.titleText)
     settingMenuObject.update(screen)
+
 def game(event):
-    pass
+    global gameObject
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        for btn in gameObject.buttons:
+        # 事件處理
+            if gameObject.buttons[btn].click(event):
+                if btn == "back": # 結束遊戲
+                    object.GameSetting.gameOver = True
+                elif btn == "restart":
+                    gameObject = object.Game()
+                elif btn == "answer":
+                    print("event: Show answer")
+                    # object.GameSetting.setting = True
+    elif event.type == KEYDOWN:
+        if event.key >= ord('a') and event.key <= ord('z'):
+            gameObject.addAlpha(chr(event.key))
+        elif event.key == K_BACKSPACE:
+            gameObject.deleteAplha()
+        elif event.key == K_RETURN:
+            gameObject.checkWord()
+    # 物件更新
+    gameObject.update(screen)
 
 def main():
     # 初始設定
