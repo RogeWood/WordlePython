@@ -2,6 +2,7 @@ import pygame
 import calculate
 from pygame.math import Vector2
 from random import randint
+from pyperclip import copy
 
 class GameSetting():
     # 視窗設定
@@ -30,13 +31,13 @@ class GameSetting():
     wordsDict = calculate.wordDictionary()
 
 class Button():
-    def __init__(self, text, pos, background, parnetSize, size = [200, 75], parnetPos = Vector2(0,0)):
+    def __init__(self, text, pos, background, parnetSize, size = [200, 75], parnetPos = Vector2(0,0), textColor = (0 ,0, 0)):
         # 按鈕設定
         self.mouseDivide = parnetPos
         self.poistion = Vector2(calculate.middlePosition([parnetSize[0] + pos[0], parnetSize[1] + pos[1]], size))
         self.fontSize = 24
         self.size = size
-        self.text = Text(text, [0, 0], self.fontSize, self.size, pygame.Color("Black"))
+        self.text = Text(text, [0, 0], self.fontSize, self.size, textColor)
         self.background = background
 
         # 按鈕建制
@@ -194,10 +195,13 @@ class Game():
         self.showAnswer = False
         self.isComplete = False
         self.hintEnable = False
+
+        self.resultTable = []
         # 選項按鈕
         self.buttons = {"back": Button("Back to menu", [-800, -170], GameSetting.buttonColor, GameSetting.screenSize),
                         "restart": Button("Restart", [-800, 30], GameSetting.buttonColor, GameSetting.screenSize),
-                        "answer": Button("Show answer", [-800, 230], GameSetting.buttonColor, GameSetting.screenSize)
+                        "answer": Button("Show answer", [-800, 230], GameSetting.buttonColor, GameSetting.screenSize),
+                        "share": Button("share", [-800, 500], (83, 141, 78), GameSetting.screenSize, size=[150, 50], textColor=pygame.Color("White"))
                        }
 
         # 單字table
@@ -218,7 +222,8 @@ class Game():
             self.buttons["answer"].changeText("Show answer")
 
         for btn in self.buttons:# 按鈕更新
-            screen.blit(self.buttons[btn].surface, self.buttons[btn].poistion)
+            if btn != "share" or self.isComplete:
+                screen.blit(self.buttons[btn].surface, self.buttons[btn].poistion)
         self.wordTable.update(screen) # 單字table更新
 
         if self.hintEnable:
@@ -255,6 +260,8 @@ class Game():
 
             # 結果檢查
             print(result)
+            self.resultTable.append(result)
+
             if calculate.resultCheck(result): # 全對
                 self.hintEnable = True
                 self.hintText.textChange("All Correct")
@@ -269,3 +276,6 @@ class Game():
                 self.point[0] += 1
                 self.point[1] = 0
         return
+
+    def shareResult(self):
+        copy(calculate.shareString(self.resultTable))

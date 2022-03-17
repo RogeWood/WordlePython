@@ -71,6 +71,8 @@ def game(event):
                         gameObject.showAnswer = False
                     else:
                         gameObject.showAnswer = True
+                elif btn == "share" and gameObject.isComplete:
+                    gameObject.shareResult()
     elif event.type == KEYDOWN: # 遊戲按鍵事件
         if not gameObject.isComplete:
             gameObject.hintEnable = False # 提示關閉

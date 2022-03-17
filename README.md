@@ -1,5 +1,5 @@
 # WordlePython
-Programming Desing Project 1
+Programming Design Project 1
 
 ## Stander
 **標準85分**
@@ -13,3 +13,7 @@ Programming Desing Project 1
 
 ## Complete
 完整檔
+
+- 使用 package:
+    - pygame
+    - pyperclip

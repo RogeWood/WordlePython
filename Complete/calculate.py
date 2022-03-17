@@ -54,3 +54,17 @@ def resultCheck(result):
         if i != 2:
             return False
     return True
+
+def shareString(result):
+    s = "wordle:\n\n"
+    for line in result:
+        for w in line:
+            if w == 2:
+                s += '🟩'
+            elif w == 1:
+                s += '🟨'
+            elif w == 0:
+                s += '⬛'
+        s += '\n'
+
+    return s

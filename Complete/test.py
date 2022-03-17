@@ -1,3 +1,8 @@
-import calculate
+import pyperclip as pc
 
-print(calculate.compareWord("apple", "ancre", calculate.wordDictionary(), 5))
+print("Wordle 271 4/6\n⬛⬛🟨🟨⬛\n⬛⬛⬛⬛⬛\n🟩🟩🟩🟨⬛\n🟩🟩🟩🟩🟩")
+print(ord("🟨"))
+print(ord("🟩"))
+print(ord("⬛"))
+
+pc.copy("🟩")
