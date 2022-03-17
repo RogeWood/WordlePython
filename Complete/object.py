@@ -2,6 +2,7 @@ import pygame
 import calculate
 from pygame.math import Vector2
 from random import randint
+
 class GameSetting():
     # 視窗設定
     screenHighth = 600
@@ -51,7 +52,7 @@ class Button():
             return True
         return False
 
-    def changeText(self, text):
+    def changeText(self, text): # 更改按鈕文字
         self.surface.fill(self.background)
         self.text.textChange(text)
         self.surface.blit(self.text.textSurface, calculate.middlePosition(self.size, self.text.textSurface.get_size()))
@@ -62,9 +63,12 @@ class Text():
         self.textSurface = self.font.render(text, True, color)
         self.color = color
         self.poistion = Vector2(calculate.middlePosition([parnetSize[0] + pos[0], parnetSize[1] + pos[1]], self.textSurface.get_size()))
+        self.parnetSize = parnetSize
+        self.pos = pos
 
     def textChange(self, text): # 更改文字
         self.textSurface = self.font.render(text, True, self.color)
+        self.poistion = Vector2(calculate.middlePosition([self.parnetSize[0] + self.pos[0], self.parnetSize[1] + self.pos[1]], self.textSurface.get_size()))
 
 class ValueSetBar():
     def __init__(self, text, pos, background, parnetSize, size = [500, 50]):
@@ -205,7 +209,7 @@ class Game():
         print(self.answer)
 
         # 提示文字
-        self.hintText = Text("asd", [0,-500], 24, GameSetting.screenSize, pygame.Color("White"))
+        self.hintText = Text("", [0,-500], 24, GameSetting.screenSize, pygame.Color("White"))
 
     def update(self, screen): # 畫面更新
         if self.showAnswer:
@@ -252,13 +256,15 @@ class Game():
             # 結果檢查
             print(result)
             if calculate.resultCheck(result): # 全對
+                self.hintEnable = True
+                self.hintText.textChange("All Correct")
                 self.isComplete = True
-                print("success")
                 return
 
             if self.point[0] == GameSetting.faildTimes-1: # 次數用盡
+                self.hintEnable = True
+                self.hintText.textChange("game over!!")
                 self.isComplete = True
-                print("gmaover: fail")
             else: # 移至下一行
                 self.point[0] += 1
                 self.point[1] = 0

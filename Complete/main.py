@@ -44,13 +44,13 @@ def settingMenu(event):
             if object.GameSetting.wordLength < 9:
                 object.GameSetting.wordLength += 1
         elif settingMenuObject.lengthBar.downButton.click(event):
-            if object.GameSetting.wordLength > 1:
+            if object.GameSetting.wordLength > 2:
                 object.GameSetting.wordLength -= 1
         elif settingMenuObject.timesBar.upButton.click(event):
             if object.GameSetting.faildTimes < 9:
                 object.GameSetting.faildTimes += 1
         elif settingMenuObject.timesBar.downButton.click(event):
-            if object.GameSetting.faildTimes > 1:
+            if object.GameSetting.faildTimes > 2:
                 object.GameSetting.faildTimes -= 1
     # 物件更新
     # screen.blit(titleText.textSurface, settingMenuObject.titleText)
@@ -58,9 +58,9 @@ def settingMenu(event):
 
 def game(event):
     global gameObject
-    if event.type == pygame.MOUSEBUTTONDOWN:
+    # 事件處理
+    if event.type == pygame.MOUSEBUTTONDOWN: # 按鈕事件
         for btn in gameObject.buttons:
-        # 事件處理
             if gameObject.buttons[btn].click(event):
                 if btn == "back": # 結束遊戲
                     object.GameSetting.gameOver = True
@@ -71,15 +71,15 @@ def game(event):
                         gameObject.showAnswer = False
                     else:
                         gameObject.showAnswer = True
-                    # object.GameSetting.setting = True
-    elif event.type == KEYDOWN:
-        gameObject.hintEnable = False
+    elif event.type == KEYDOWN: # 遊戲按鍵事件
         if not gameObject.isComplete:
-            if event.key >= ord('a') and event.key <= ord('z'):
+            gameObject.hintEnable = False # 提示關閉
+
+            if event.key >= ord('a') and event.key <= ord('z'): # 輸入字母
                 gameObject.addAlpha(chr(event.key))
-            elif event.key == K_BACKSPACE:
+            elif event.key == K_BACKSPACE: # 刪除字母
                 gameObject.deleteAplha()
-            elif event.key == K_RETURN:
+            elif event.key == K_RETURN: # 完成單字
                 gameObject.checkWord()
     # 物件更新
     gameObject.update(screen)
