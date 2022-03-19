@@ -10,6 +10,10 @@ def init():
     global fpsclock
     fpsclock = pygame.time.Clock() # 畫面更新律變數
 
+    icon = pygame.image.load(object.GameSetting.iconLink)
+    pygame.display.set_icon(icon)
+    pygame.display.set_caption(object.GameSetting.gameTitle)
+
     # 菜單設定
     global menuObject
     menuObject = object.Menu()
@@ -26,11 +30,11 @@ def menu(event):
             if menuObject.buttons[btn].click(event):
                 if btn == "exit": # 結束遊戲
                     object.GameSetting.running = False
-                elif btn == "start":
+                elif btn == "start": # 遊戲開始
                     global gameObject
                     gameObject = object.Game()
                     object.GameSetting.gameOver = False
-                elif btn == "setting":
+                elif btn == "setting": # 遊戲設定
                     object.GameSetting.setting = True
         # 物件更新
         menuObject.update(screen)
@@ -104,6 +108,7 @@ def main():
                 else:
                     game(event)
 
+        # 畫面更新
         pygame.display.update()
         fpsclock.tick(object.GameSetting.FPS)
 

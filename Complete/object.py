@@ -12,6 +12,9 @@ class GameSetting():
     screenDefultSize = (screenWidth, screenHighth)
     screenDefultColor = (0, 0, 0)
 
+    gameTitle = "Wordle"
+    iconLink = "image/icon.ico"
+
     # 畫面每秒更新律
     FPS = 60
 
@@ -278,4 +281,5 @@ class Game():
         return
 
     def shareResult(self):
+        self.buttons["share"].changeText("Copied")
         copy(calculate.shareString(self.resultTable))
