@@ -1,6 +1,8 @@
 # WordlePython
 Programming Design Project 1
 
+## 遊戲下載
+![exe.zip](https://github.com/RogeWood/WordlePython/tree/main/exefile)
 ## Stander
 **標準85分**
 
