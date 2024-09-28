@@ -1,9 +1,9 @@
 # WordlePython
-<--!Programming Design Project 1-->
+Programming Design Project 1
 
 ## 遊戲下載
 [exe.zip](https://github.com/RogeWood/WordlePython/tree/main/exefile)
-<--!## Stander
+## Stander
 **標準85分**
 
 - 基本要求 (55%)
@@ -11,7 +11,7 @@
 - 題目從單字庫隨機抽取 (5%)
 - 視覺效果：將文字顏色 (前景或背景) 改變以作為提示 (5%)
 - 可調整題目長度、失敗容許次數 (5%)
-- 其他功能 (以 Demo 助教為準)：每多一個功能 (5%)-->
+- 其他功能 (以 Demo 助教為準)：每多一個功能 (5%)
 
 ## Complete
 完整檔
